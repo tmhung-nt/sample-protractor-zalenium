@@ -1,0 +1,11 @@
+.idea/
+allure-results/
+node_modules/
+out/
+output/
+reports/
+videos/
+test-results/
+*.iml
+*.zip
+images/

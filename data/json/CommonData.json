@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "sURL":"https://www.awwwards.com/",
+      "iconSearch":"//div[@id='js-search-container']",
+      "inputSearch":"//input[@id='search-text']",
+      "btnClear":"//div[@class='bt-close js-search-close']",
+      "textResult":"//div[@class='box-heading']//h2",
+      "menuMain":"//*[contains(text(),'MENU')]"
+    }
+  ]
+}

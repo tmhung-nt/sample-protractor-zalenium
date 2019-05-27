@@ -1,0 +1,40 @@
+# Usage:
+    #   docker-compose up --force-recreate
+version: '3'
+
+services:
+  #--------------#
+  hub:
+    image: "dosel/zalenium"
+    container_name: zalenium
+    hostname: zalenium
+    tty: true
+    volumes:
+      - ./videos:/home/seluser/videos
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 4444:4444
+    command: >
+      start --desiredContainers 2
+            --maxDockerSeleniumContainers 8
+            --screenWidth 1360 --screenHeight 1024
+            --timeZone "Asia/Bangkok"
+            --videoRecordingEnabled true
+            --keepOnlyFailedTests true
+    environment:
+      - HOST_UID
+      - HOST_GID
+
+  e2e:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile-Zalenium
+    depends_on:
+      - hub
+    environment:
+      - SELENIUM_URL=http://hub:4444
+    volumes:
+      - /tests/node_modules
+      - ./:/tests:rw
+      - ./test-results/reports:/tests/reports:rw
+      - ./test-results/allure:/tests/allure-results:rw
