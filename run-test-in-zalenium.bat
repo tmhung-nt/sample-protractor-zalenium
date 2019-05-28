@@ -6,13 +6,13 @@ echo "Pull latest elgalu/selenium image"
 call docker pull elgalu/selenium
 
 echo "Build protractor-demo_e2e image"
-call docker-compose build --no-cache e2e
+call docker-compose -f zalenium-compose.yml build --no-cache e2e
 
 echo "start zalenium hub"
-call docker-compose up -d hub
+call docker-compose -f zalenium-compose.yml up -d hub
 
 echo "Start execution..."
-call docker-compose run  e2e
+call docker-compose -f zalenium-compose.yml run  e2e
 
 echo "Clean up after execution"
-call docker-compose down
+call docker-compose -f zalenium-compose.yml down

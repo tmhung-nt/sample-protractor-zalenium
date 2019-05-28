@@ -1,3 +1,4 @@
+
 # Usage:
     #   docker-compose up --force-recreate
 version: '3'
@@ -28,7 +29,7 @@ services:
   e2e:
     build:
       context: .
-      dockerfile: Docker/Dockerfile-Zalenium
+      dockerfile: Docker/Dockerfile
     depends_on:
       - hub
     environment:

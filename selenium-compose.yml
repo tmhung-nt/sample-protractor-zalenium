@@ -1,0 +1,63 @@
+version: '3'
+services:
+  hub:
+    image: selenium/hub:latest
+    ports:
+      - "4444:4444"
+    environment: 
+      - GRID_BROWSER_TIMEOUT=3600
+      - GRID_TIMEOUT=3600     
+    networks:
+      - selenium-grid
+
+  chrome:
+    image: selenium/node-chrome-debug:latest
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+      - HUB_PORT_4444_TCP_PORT=4444
+      - SCREEN_WIDTH=1366
+      - SCREEN_HEIGHT=768
+    volumes:
+      - ./:/tests:rw
+    ports:
+      - 5901:5900
+    depends_on:
+      - hub
+    networks:
+      - selenium-grid
+
+  firefox:
+    image: selenium/node-firefox-debug:latest
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+      - HUB_PORT_4444_TCP_PORT=4444
+      - SCREEN_WIDTH=1366
+      - SCREEN_HEIGHT=768
+    volumes:
+      - ./:/tests:rw
+    ports:
+      - 5902:5900
+    depends_on:
+      - hub
+    networks:
+      - selenium-grid
+
+  e2e:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - SELENIUM_URL=http://hub:4444
+    volumes:
+      - /tests/node_modules
+      - ./:/tests:rw
+      - ./test-results/reports:/tests/reports:rw
+      - ./test-results/allure-results:/tests/allure-results:rw
+    networks:
+      - selenium-grid 
+
+networks:
+  selenium-grid:
